@@ -19,4 +19,7 @@ const filmSchema = new mongoose.Schema({
 
 const Location = mongoose.model('Location', filmSchema)
 
+// Dans un autre fichier on pourra donc écrire :
+// import Location from 'locations.model.js';
 module.exports = Location
+
