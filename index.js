@@ -3,6 +3,7 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
 
 // dotenv: It loads environment variables from a .env file.
 require('dotenv').config()
@@ -10,7 +11,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {console.log('Connected!') })
 
 //File loader : Location Controller
 const locationController = require('./locations/locations.controller')
-
+const userController = require('./users/users.controller')
 
 const port = 3000
 
@@ -18,7 +19,9 @@ const port = 3000
 // It is mostly used to set up middleware for your application.
 // Un middleware permet d'améliorer l'efficacité des développeurs qui créent les applications.
 // Il joue le rôle de lien entre les applications, les données et les utilisateurs.
-app.use('/locations',locationController)
+app.use(bodyParser.json())
+app.use('/',locationController)
+app.use('/users',userController)
 
 //app.use(notFound);
 //app.use(errorHandler);

@@ -15,8 +15,8 @@ function findOneSource(id) {
 
 }
 async function insert(data) {
-	let film = new Location();
-	await film.save(data)
+	let film = new Location(data);
+	await film.save()
 }
 
 async function remove(id) {
