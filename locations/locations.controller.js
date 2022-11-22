@@ -34,37 +34,14 @@ router.get('/:id', async (req, res, next) => {
 /** Create a new location **/
 router.post('/', async (req, res, next) => {
 	try {
-		const {
-			filmType,
-			filmProducerName,
-			endDate, filmName,
-			district, sourceLocationId,
-			filmDirectorName,
-			address,
-			startDate,
-			year} = req.body;
-
-		const loc = await locationsService.findOne({sourceLocationId
-		})
-
-		// Employee already exists
+		const loc = await locationsService.findOneSource(req.sourceLocationId)
+		// Location already exists
 		if (loc) {
 			res.status(409); // conflict error
 			const error = new Error('Location already exists');
 			return next(error);
 		}
-
-		const newloc = await locationsService.insert({
-			filmType,
-			filmProducerName,
-			endDate, filmName,
-			district, sourceLocationId,
-			filmDirectorName,
-			address,
-			startDate,
-			year
-		});
-
+		const newloc = await locationsService.insert({...req.body});
 		console.log('New location has been created');
 		res.status(201).json(newloc);
 	} catch(error) {
@@ -90,9 +67,7 @@ router.delete('/:id', async (req, res, next) => {
 	}
 });
 
-
-
-/* Update a specific location */
+/** Update a specific location */
 router.put('/:id', async (req, res, next) => {
 	try {
 		const { id } = req.params;

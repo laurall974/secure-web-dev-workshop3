@@ -10,19 +10,13 @@ function findOne(id) {
 	return Location.findOne({'_id':id});
 
 }
-async function insert(filmType, filmProducerName, endDate, filmName, district, sourceLocationId, filmDirectorName, address, startDate, year) {
+function findOneSource(id) {
+	return Location.findOne({'SourceLocationId':id});
+
+}
+async function insert(data) {
 	let film = new Location();
-	film.filmType = filmType;
-	film.filmProducerName = filmProducerName;
-	film.endDate = endDate;
-	film.filmName = filmName;
-	film.district = district;
-	film.sourceLocationId = sourceLocationId;
-	film.filmDirectorName = filmDirectorName;
-	film.address = address;
-	film.startDate = startDate;
-	film.year = year;
-	await film.save()
+	await film.save(data)
 }
 
 async function remove(id) {
@@ -54,3 +48,4 @@ module.exports.findOne = findOne;
 module.exports.insert = insert;
 module.exports.remove = remove;
 module.exports.update = update;
+module.exports.findOneSource = findOneSource;

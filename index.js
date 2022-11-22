@@ -20,8 +20,8 @@ const port = 3000
 // Il joue le rôle de lien entre les applications, les données et les utilisateurs.
 app.use('/locations',locationController)
 
-app.use(notFound);
-app.use(errorHandler);
+//app.use(notFound);
+//app.use(errorHandler);
 
 app.listen(port, () => {
 	console.log(`API listening on port ${port}, visit http://localhost:${port}/`)
