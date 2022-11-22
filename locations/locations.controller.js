@@ -31,55 +31,46 @@ router.get('/:id', async (req, res, next) => {
 	}
 });
 
-// /** Create a new location **/
-// router.post('/', async (req, res, next) => {
-// 	try {
-// 		const {
-// 			filmType,
-// 			filmProducerName,
-// 			endDate, filmName,
-// 			district, sourceLocationId,
-// 			filmDirectorName,
-// 			address,
-// 			startDate,
-// 			year} = req.body;
-// 		const result = await filmSchema.validateAsync({filmType,
-// 			filmProducerName,
-// 			endDate, filmName,
-// 			district, sourceLocationId,
-// 			filmDirectorName,
-// 			address,
-// 			startDate,
-// 			year});
-//
-// 		const loc = await Location.findOne({
-// 			filmName,sourceLocationId
-// 		})
-//
-// 		// Employee already exists
-// 		if (loc) {
-// 			res.status(409); // conflict error
-// 			const error = new Error('Location already exists');
-// 			return next(error);
-// 		}
-//
-// 		const newloc = await Location.insert({
-// 			filmType,
-// 			filmProducerName,
-// 			endDate, filmName,
-// 			district, sourceLocationId,
-// 			filmDirectorName,
-// 			address,
-// 			startDate,
-// 			year
-// 		});
-//
-// 		console.log('New location has been created');
-// 		res.status(201).json(newloc);
-// 	} catch(error) {
-// 		next(error);
-// 	}
-// });
+/** Create a new location **/
+router.post('/', async (req, res, next) => {
+	try {
+		const {
+			filmType,
+			filmProducerName,
+			endDate, filmName,
+			district, sourceLocationId,
+			filmDirectorName,
+			address,
+			startDate,
+			year} = req.body;
+
+		const loc = await locationsService.findOne({sourceLocationId
+		})
+
+		// Employee already exists
+		if (loc) {
+			res.status(409); // conflict error
+			const error = new Error('Location already exists');
+			return next(error);
+		}
+
+		const newloc = await locationsService.insert({
+			filmType,
+			filmProducerName,
+			endDate, filmName,
+			district, sourceLocationId,
+			filmDirectorName,
+			address,
+			startDate,
+			year
+		});
+
+		console.log('New location has been created');
+		res.status(201).json(newloc);
+	} catch(error) {
+		next(error);
+	}
+});
 //
 // /* Update a specific location */
 // router.put('/:id', async (req, res, next) => {
