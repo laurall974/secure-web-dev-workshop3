@@ -25,7 +25,19 @@ async function insert(filmType, filmProducerName, endDate, filmName, district, s
 	await film.save()
 }
 
+async function remove(id) {
+	try {
+		const query = await Location.deleteOne({'_id':id})
+		console.log(query);
+	} catch (error) {
+		//console.error(error);
+		console.error('ID does not exist');
+	}
+
+}
+
 
 module.exports.findAll = findAll;
 module.exports.findOne = findOne;
 module.exports.insert = insert;
+module.exports.remove = remove;

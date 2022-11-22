@@ -71,6 +71,26 @@ router.post('/', async (req, res, next) => {
 		next(error);
 	}
 });
+
+/** Delete a specific location */
+router.delete('/:id', async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		const loc = await locationsService.findOne(id);
+		// Employee does not exist
+		if(!loc) {
+			return next();
+		}
+		await locationsService.remove(id);
+		res.json({
+			message: 'Success'
+		});
+	} catch(error) {
+		next(error);
+	}
+});
+
+
 //
 // /* Update a specific location */
 // router.put('/:id', async (req, res, next) => {
@@ -114,30 +134,7 @@ router.post('/', async (req, res, next) => {
 // 	}
 // });
 //
-// /* Delete a specific location */
-// router.delete('/:id', async (req, res, next) => {
-// 	try {
-// 		const { id } = req.params;
-// 		const loc = await Location.findOne({
-// 			_id: id
-// 		});
-//
-// 		// Employee does not exist
-// 		if(!loc) {
-// 			return next();
-// 		}
-// 		await Location.remove({
-// 			_id: id
-// 		});
-//
-// 		res.json({
-// 			message: 'Success'
-// 		});
-//
-// 	} catch(error) {
-// 		next(error);
-// 	}
-// });
+
 
 module.exports = router
 
