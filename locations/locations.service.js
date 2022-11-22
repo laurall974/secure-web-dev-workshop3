@@ -36,8 +36,21 @@ async function remove(id) {
 
 }
 
+async function update(id, option, newValue){
+	try {
+		const loc = await Location.findById(id)
+		loc[option] = newValue;
+		await loc.save();
+		console.log('Updated')
+	}
+	catch (error){
+		console.error(error)
+	}
+}
+
 
 module.exports.findAll = findAll;
 module.exports.findOne = findOne;
 module.exports.insert = insert;
 module.exports.remove = remove;
+module.exports.update = update;
