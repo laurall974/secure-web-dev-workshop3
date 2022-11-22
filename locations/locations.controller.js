@@ -68,20 +68,19 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 /** Update a specific location */
-router.put('/:id', async (req, res, next) => {
+router.patch('/:id', async (req, res, next) => {
 	try {
 		const { id } = req.params;
-		const {option, newValue} = req.body;
-		const loc = await locationsService.findOne({
-			_id: id
-		});
+		const loc = await locationsService.findOne(id);
 		// Location does not exist
 		if(!loc) {
 			return next();
 		}
-
-		const updatedLoc = await locationsService.update(id, option, newValue);
-		res.json(updatedLoc);}
+		const updatedLoc = await locationsService.updateLoc(id, res.element, res.newValue);
+		res.json(updatedLoc);
+		res.json({
+			message: 'Success'
+		});}
 
 	catch(error) {
 		next(error);

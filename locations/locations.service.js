@@ -30,10 +30,10 @@ async function remove(id) {
 
 }
 
-async function update(id, option, newValue){
+async function updateLoc(id, element, newValue){
 	try {
-		const loc = await Location.findById(id)
-		loc[option] = newValue;
+		const loc = await Location.findOne({'_id':id})
+		loc[element] = newValue;
 		await loc.save();
 		console.log('Updated')
 	}
@@ -47,5 +47,5 @@ module.exports.findAll = findAll;
 module.exports.findOne = findOne;
 module.exports.insert = insert;
 module.exports.remove = remove;
-module.exports.update = update;
+module.exports.updateLoc = updateLoc;
 module.exports.findOneSource = findOneSource;
