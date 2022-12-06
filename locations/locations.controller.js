@@ -1,9 +1,5 @@
-// This file is used to map API calls (Presentation Layer) with the
-// Business-Logic layer
-
 const router = require('express').Router()
 const locationsService = require('./locations.service')
-
 
 /** Get all Locations **/
 router.get('/', async (req, res, next) => {
@@ -47,7 +43,7 @@ router.delete('/:id', async (req, res, next) => {
 	try {
 		const { id } = req.params;
 		const loc = await locationsService.findOne(id);
-		// Employee does not exist
+		// Location does not exist
 		if(!loc) {
 			return next();
 		}

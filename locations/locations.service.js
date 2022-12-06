@@ -1,6 +1,3 @@
-
-// This file holds the Business-Logic layer, interacting with Data Layer
-
 const Location = require('./locations.model')
 
 function findAll () {
@@ -29,7 +26,6 @@ async function remove(id) {
 	}
 
 }
-
 async function updateLoc(id, element, newValue){
 	try {
 		const loc = await Location.findOne({'_id':id})
