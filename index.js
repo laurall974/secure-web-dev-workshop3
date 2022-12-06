@@ -20,7 +20,7 @@ const port = 3000
 // Un middleware permet d'améliorer l'efficacité des développeurs qui créent les applications.
 // Il joue le rôle de lien entre les applications, les données et les utilisateurs.
 app.use(bodyParser.json())
-app.use('/',locationController)
+app.use('/locations',locationController)
 app.use('/users',userController)
 
 //app.use(notFound);

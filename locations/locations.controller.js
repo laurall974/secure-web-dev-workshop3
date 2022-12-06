@@ -6,7 +6,7 @@ const locationsService = require('./locations.service')
 
 
 /** Get all Locations **/
-router.get('/locations', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
 	try {
 		const allLocations = await locationsService.findAll();
 		res.json(allLocations);
@@ -16,7 +16,7 @@ router.get('/locations', async (req, res, next) => {
 });
 
 /** Get a specific Location **/
-router.get('/locations/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
 	try {
 		const { id } = req.params;
 		const loc = await locationsService.findOne(id);
@@ -32,17 +32,8 @@ router.get('/locations/:id', async (req, res, next) => {
 });
 
 /** Create a new location **/
-router.post('/locations', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
 	try {
-		/*const loc = await locationsService.findOneSource(req.sourceLocationId)
-		// Location already exists
-		if (loc) {
-			res.status(409); // conflict error
-			const error = new Error('Location already exists');
-			return next(error);
-		} */
-		console.log({...req.body});
-		console.log(req.body);
 		const newloc = await locationsService.insert({...req.body});
 		console.log('New location has been created');
 		res.status(201).json(newloc);
@@ -52,7 +43,7 @@ router.post('/locations', async (req, res, next) => {
 });
 
 /** Delete a specific location */
-router.delete('/locations/:id', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
 	try {
 		const { id } = req.params;
 		const loc = await locationsService.findOne(id);
@@ -70,7 +61,7 @@ router.delete('/locations/:id', async (req, res, next) => {
 });
 
 /** Update a specific location */
-router.patch('/locations/:id', async (req, res, next) => {
+router.patch('/:id', async (req, res, next) => {
 	try {
 		const { id } = req.params;
 		const loc = await locationsService.findOne(id);
@@ -78,7 +69,8 @@ router.patch('/locations/:id', async (req, res, next) => {
 		if(!loc) {
 			return next();
 		}
-		const updatedLoc = await locationsService.updateLoc(id, res.element, res.newValue);
+
+		const updatedLoc = await locationsService.updateLoc(id, req.body.element, req.body.newValue);
 		res.json(updatedLoc);
 		res.json({
 			message: 'Success'

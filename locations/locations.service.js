@@ -11,7 +11,7 @@ function findOne(id) {
 
 }
 function findOneSource(id) {
-	return Location.findOne({'SourceLocationId':id});
+	return Location.findOne({'sourceLocationId':id});
 
 }
 async function insert(data) {
