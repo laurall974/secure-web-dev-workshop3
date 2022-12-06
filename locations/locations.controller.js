@@ -28,7 +28,9 @@ router.get('/:id', async (req, res, next) => {
 });
 
 /** Create a new location **/
-router.post('/', async (req, res, next) => {
+router.post('/',
+	passort.authenticate('local', {failureRedirect : '/login', failureMessage : true}),
+	async (req, res, next) => {
 	try {
 		const newloc = await locationsService.insert({...req.body});
 		console.log('New location has been created');
