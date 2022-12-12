@@ -1,47 +1,80 @@
+// This file holds the Business-Logic layer, interacting with Data Layer
+
 const Location = require('./locations.model')
 
-function findAll () {
+async function findAll () {
 	return Location.find();
 }
-function findOne(id) {
-	return Location.findOne({'_id':id});
-
-}
-function findOneSource(id) {
-	return Location.findOne({'sourceLocationId':id});
-
-}
-async function insert(data) {
-	let film = new Location(data);
-	await film.save()
-}
-
-async function remove(id) {
+async function findOne({_id}) {
 	try {
-		const query = await Location.deleteOne({'_id':id})
-		console.log(query);
-	} catch (error) {
-		//console.error(error);
-		console.error('ID does not exist');
+		if (_id.match(/^[0-9a-fA-F]{24}$/))
+			return Location.findOne({_id}, null).orFail();
+		else
+			throw new Error("id specified is incorrect");
+	} catch (err) {
+		console.log("Something occured while retrieving a location");
+		console.error(err);
+		return null;
 	}
-
 }
-async function updateLoc(id, element, newValue){
+
+async function createOne(location) {
 	try {
-		const loc = await Location.findOne({'_id':id})
-		loc[element] = newValue;
-		await loc.save();
-		console.log('Updated')
-	}
-	catch (error){
-		console.error(error)
+		if (location === undefined) throw new Error("undefined location");
+
+		const { filmType, filmProducerName, endDate, filmName, district, geolocation, sourceLocationId, filmDirectorname, address, startDate, year } = location;
+		await Location.create({ filmType,
+			filmProducerName,
+			endDate,
+			filmName,
+			district,
+			geolocation,
+			sourceLocationId,
+			filmDirectorname,
+			address,
+			startDate,
+			year
+		}).orFail();
+		console.log("Location added");
+		return true;
+
+	} catch (err) {
+		console.log("No location");
+		console.error(err);
+		return false;
 	}
 }
 
+async function deleteOne(id){
+	try {
+		const {_id} = id;
+		await Location.findOneAndDelete({_id}).orFail();
+		console.log(`Deleted ${_id}`);
+		return true;
+	} catch (e) {
+		console.log("No delete");
+		console.error(err);
+		return false;
+	}
+}
 
-module.exports.findAll = findAll;
-module.exports.findOne = findOne;
-module.exports.insert = insert;
-module.exports.remove = remove;
-module.exports.updateLoc = updateLoc;
-module.exports.findOneSource = findOneSource;
+async function updateOne(id, property){
+	try {
+		const {_id} = id;
+		await Location.findOneAndUpdate({_id}, property).orFail();
+		console.log(`Updated ${_id}`);
+		return true;
+	} catch (e) {
+		console.log("No update");
+		console.error(err);
+		return false;
+	}
+}
+
+module.exports = {
+	findAll,
+	findOne,
+	createOne,
+	deleteOne,
+	updateOne
+}

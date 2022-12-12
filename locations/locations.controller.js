@@ -1,83 +1,87 @@
 const router = require('express').Router()
 const locationsService = require('./locations.service')
 
-/** Get all Locations **/
-router.get('/', async (req, res, next) => {
-	try {
-		const allLocations = await locationsService.findAll();
-		res.json(allLocations);
-	} catch(error) {
-		next(error);
-	}
-});
+const passport = require('passport');
+require('../passportStrategy/jwt.strategy');
 
-/** Get a specific Location **/
-router.get('/:id', async (req, res, next) => {
-	try {
-		const { id } = req.params;
-		const loc = await locationsService.findOne(id);
-		if(!loc) {
-			const error = new Error('Location does not exist');
-			return next(error);
-		}
 
-		res.json(loc);
-	} catch(error) {
-		next(error);
-	}
-});
+// Authorization middleware
+router.use('/', passport.authenticate('jwt', { session: false }));
 
-/** Create a new location **/
-router.post('/',
-	passort.authenticate('local', {failureRedirect : '/login', failureMessage : true}),
-	async (req, res, next) => {
-	try {
-		const newloc = await locationsService.insert({...req.body});
-		console.log('New location has been created');
-		res.status(201).json(newloc);
-	} catch(error) {
-		next(error);
-	}
-});
+router.route('/')
+	.get(async (req, res) => {
+		return res.status(200).send({locations: await locationsService.findAll()});
+	})
+	.post(async (req, res) => {
+		if (req?.body) {
 
-/** Delete a specific location */
-router.delete('/:id', async (req, res, next) => {
-	try {
-		const { id } = req.params;
-		const loc = await locationsService.findOne(id);
-		// Location does not exist
-		if(!loc) {
-			return next();
-		}
-		await locationsService.remove(id);
-		res.json({
-			message: 'Success'
-		});
-	} catch(error) {
-		next(error);
-	}
-});
+			const body = req.body;
 
-/** Update a specific location */
-router.patch('/:id', async (req, res, next) => {
-	try {
-		const { id } = req.params;
-		const loc = await locationsService.findOne(id);
-		// Location does not exist
-		if(!loc) {
-			return next();
-		}
+			if (
+				body.filmType &&
+				body.filmProducerName &&
+				body.endDate &&
+				body.filmName &&
+				body.district &&
+				body?.geolocation &&
+				body.geolocation?.coordinates &&
+				body.geolocation?.type &&
+				body.sourceLocationId &&
+				body.filmDirectorName &&
+				body.address &&
+				body.startDate &&
+				body.year
+			) {
+				const create = await locationsService.createOne(body);
+				if (create) return res.status(200).send("Location created");
+				else return res.status(400).send("An error occurred when creating a location");
+			} else {
+				return res.status(400).send("Parameters are incorrect, please use : \n" + "{\t\nfilmType: String,\n" +
+					"\tfilmProducerName: String, \n" +
+					"\tendDate: Date, \n" +
+					"\tfilmName: String, \n" +
+					"\tdistrict: Number, \n" +
+					"\tgeolocation: {\n" +
+					"\t\tcoordinates: [Number], \n" +
+					"\t\ttype: { type: String }, \n" +
+					"\t}, \n" +
+					"\tsourceLocationId: String, \n" +
+					"\tfilmDirectorName: String, \n" +
+					"\taddress: String, \n" +
+					"\tstartDate: Date, \n" +
+					"\tyear: Number\n}");
+			}
+		} else
+			return res.status(400).send("Parameters not found");
+	});
 
-		const updatedLoc = await locationsService.updateLoc(id, req.body.element, req.body.newValue);
-		res.json(updatedLoc);
-		res.json({
-			message: 'Success'
-		});}
-
-	catch(error) {
-		next(error);
-	}
-});
-
+router.route('/:id')
+	.get(async (req, res) => {
+		console.log("[GET] TOKEN : " + req.user);
+		if (req?.params?.id === undefined) return res.status(400).send("Bad request, please provide an ID");
+		const _id = req.params.id;
+		const response = await locationsService.findOne({_id});
+		if (response)
+			return res.status(200).send(response);
+		else
+			return res.status(404).send("Location not found");
+	})
+	.patch(async (req, res) => {
+		if (req?.params?.id === undefined || !req?.body === undefined) return res.status(400).send("Bad request, please check the id and the body");
+		const _id = req.params.id;
+		const response = await locationsService.updateOne({_id}, req.body);
+		if (response)
+			return res.status(200).send(`Updated ${_id}`);
+		else
+			return res.status(400).send("Location not found");
+	})
+	.delete(async (req, res) => {
+		if (req?.params?.id === undefined) return res.status(400).send("Bad request, please provide an ID");
+		const _id = req.params.id;
+		const response = await locationsService.deleteOne({_id});
+		if (response)
+			return res.status(200).send(`Deleted ${_id}`);
+		else
+			return res.status(404).send("Location not found");
+	})
 module.exports = router
-
