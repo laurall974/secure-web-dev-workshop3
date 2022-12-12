@@ -29,12 +29,12 @@ router.post('/login',
         return res.status(200).send({token});
     });
 
-router.post('/login/password',
-    passport.authenticate('local', {failureRedirect : '/login', failureMessage : true}),
-    async function (req ,res) {
-    const jwt = userService.signJwt(req.body.user);
-    res.status(200).send({token : jwt});
-});
+// router.post('/login/password',
+//     passport.authenticate('local', {failureRedirect : '/login', failureMessage : true}),
+//     async function (req ,res) {
+//     const jwt = userService.signJwt(req.body.user);
+//     res.status(200).send({token : jwt});
+// });
 
 
 /**JWT middleware**/
