@@ -1,4 +1,4 @@
-# Workshop 4 - User Authorization (Middleware)
+# Workshop 5 - User Authorization (Middleware)
 
 ## 🌟 Goal
 
