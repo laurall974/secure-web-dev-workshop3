@@ -26,7 +26,7 @@ async function findAll() {
     try {
         return User.find({}).select('username');
     } catch (err) {
-        console.log("[!] Error");
+        console.log("ERROR !");
         console.error(err);
         return false;
     }
@@ -34,9 +34,9 @@ async function findAll() {
 
 async function getUser(id) {
     try {
-        return await User.findOne({id});
+        return await User.findOne({'_id':id});
     } catch (err) {
-        console.log("[!] Error");
+        console.log("ERROR !");
         console.error(err);
         return null;
     }
@@ -44,9 +44,9 @@ async function getUser(id) {
 
 async function checkUser(username) {
     try {
-        return await User.findOne({username});
+        return await User.findOne({'username' : username});
     } catch (err) {
-        console.log("[!] Error");
+        console.log("ERROR !");
         console.error(err);
         return null;
     }
@@ -57,7 +57,7 @@ async function update(id, property) {
         await User.findOneAndUpdate({id}, property);
         return await getUser(id);
     } catch (err) {
-        console.log("[!] Error");
+        console.log("ERROR !");
         console.error(err);
         return null;
     }
@@ -65,9 +65,9 @@ async function update(id, property) {
 
 async function deleteUser(id) {
     try {
-        return await User.findOneAndDelete({_id:id});
+        return await User.findOneAndDelete({'_id':id});
     } catch (err) {
-        console.log("[!] Error");
+        console.log("ERROR !");
         console.error(err);
         return null;
     }
@@ -75,16 +75,15 @@ async function deleteUser(id) {
 
 async function verify(username, password) {
     try {
-        const user = await User.findOne({username});
+        const user = await User.findOne({'username' : username});
         const match = await bcrypt.compare(password, user.password);
         return match;
     } catch (err) {
-        console.log("[!] Error");
+        console.log("ERROR !");
         console.error(err);
         return null;
     }
 }
-
 
 
 async function generateJWT(username) {

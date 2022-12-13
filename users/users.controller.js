@@ -2,7 +2,7 @@ const usersService = require("../users/users.service");
 const router = require('express').Router()
 const passport = require('passport');
 require('../passportStrategy/local');
-require('../passportStrategy/jwt.strategy');
+require('../passportStrategy/jwt');
 const roleMiddleware = require('../jwtMiddleware/middleware');
 
 
@@ -47,7 +47,7 @@ router.post('/login',
 
 
 /**JWT middleware**/
-router.use('/me',passport.authenticate('jwt.strategy', {session:false, failureRedirect:'/login'}));
+router.use('/me',passport.authenticate('jwt', {session:false, failureRedirect:'/login'}));
 
 // Get self
 router.get('/me', async (req, res) => {
