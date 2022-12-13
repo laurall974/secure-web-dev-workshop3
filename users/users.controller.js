@@ -47,23 +47,24 @@ router.post('/login',
 
 
 /**JWT middleware**/
-router.use('/me',passport.authenticate('jwt', {
-    session:false, failureRedirect:'/users/login'
-}));
+router.use('/me',passport.authenticate('jwt.strategy', {session:false, failureRedirect:'/login'}));
 
 // Get self
-router.route('/me')
-    .get(async (req, res) => {
-        return res.status(200).send(await usersService.getUser(req.user));
-    })
-    .patch(async (req, res) => {
+router.get('/me', async (req, res) => {
+    return res.status(200).send(await usersService.getUser(req.user));
+})
+
+router.patch('/me',
+    async (req, res) => {
         return res.status(200).send(await usersService.update(req.user, req.body));
     })
-    .delete(async (req, res) => {
+
+router.delete('/me',
+    async (req, res) => {
         return res.status(200).send(await(usersService.deleteUser(req.user)));
     });
 
-// Get all users
+// Get all users : remember to not return users passwords on this route
 router.get('/', async (req, res) => {
     return res.status(200).send({users:usersService.findAll()});
 });
