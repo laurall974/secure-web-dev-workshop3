@@ -57,7 +57,8 @@ router.get('/me', async (req, res) => {
 
 router.patch('/me',
     async (req, res) => {
-        return res.status(200).send(await usersService.update(req.user, req.body));
+        const updatedUser = await usersService.update(req.user, req.body);
+        return res.status(200).send(updatedUser);
     })
 
 router.delete('/me',
@@ -67,7 +68,8 @@ router.delete('/me',
 
 // Get all users : remember to not return users passwords on this route
 router.get('/', async (req, res) => {
-    return res.status(200).send(await(usersService.findAll()));
+    const allUser = await(usersService.findAll())
+    return res.status(200).send(allUser);
 });
 
 

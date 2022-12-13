@@ -57,7 +57,7 @@ async function getUser(id) {
 
 async function update(id, property) {
     try {
-        await User.findOneAndUpdate({_id}, property);
+        await User.findOneAndUpdate(id, property);
         return await getUser(id);
     } catch (err) {
         console.log("ERROR !");
