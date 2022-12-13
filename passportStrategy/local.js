@@ -4,9 +4,9 @@ const User = require('../users/users.model');
 const usersService = require('../users/users.service');
 
 passport.use(new Strategy(
-    function (username, password, done) {
-        User.findOne({ username }, async function (err, user) {
-            if (err)    return done(err)
+    async function (username, password, done) {
+        try {
+        const user = await User.findOne(username)
             if (!user)  {
                 console.log("User not found");
                 return done(null, false);
@@ -16,7 +16,10 @@ passport.use(new Strategy(
                 return done(null, false);
             }
             return done(null, user);
-        });
+        }
+        catch(err) {
+            if (err)    return done(err)
+        }
     }
 ));
 

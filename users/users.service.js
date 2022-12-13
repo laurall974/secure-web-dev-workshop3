@@ -59,8 +59,20 @@ async function getUser(id) {
 
 async function update(id, property) {
     try {
-        await User.findOneAndUpdate(id, property);
-        return await getUser(id);
+        //on l'empeche de modofier son role
+        if (property.role != null)
+        {
+            const obj = {
+                "username":property.username,
+                "password":property.password
+            }
+            await User.findOneAndUpdate(id, obj);
+            return await getUser(id);
+        }
+        else {
+            await User.findOneAndUpdate(id, property);
+            return await getUser(id);
+        }
     } catch (err) {
         console.log("ERROR !");
         console.error(err);
@@ -89,7 +101,9 @@ async function verify(username, password) {
         return null;
     }
 }
-
+async function findOne(value){
+    return User.findOne(value);
+}
 
 module.exports.register = register;
 module.exports.findAll = findAll;
@@ -99,3 +113,4 @@ module.exports.verify = verify;
 module.exports.generateJWT = generateJWT;
 module.exports.update = update;
 module.exports.deleteUser = deleteUser;
+module.exports.findOne = findOne;

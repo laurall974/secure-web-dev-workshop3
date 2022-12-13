@@ -8,14 +8,12 @@ require('../passportStrategy/jwt');
 // Authorization middleware
 router.use('/', passport.authenticate('jwt', { session: false }));
 
-router.get('/',
+router.get('/', middleware.canAccess(['admin','user']),
 	async (req, res) => {
-		middleware.canAccess(['admin','user'])
 		return res.status(200).send({locations: await locationsService.findAll()});
 	});
 
-router.post('/',async (req, res) => {
-	middleware.canAccess(['admin'])
+router.post('/',middleware.canAccess(['admin']),async (req, res) => {
 	if (req?.body) {
 		const body = req.body;
 		if (
@@ -56,9 +54,8 @@ router.post('/',async (req, res) => {
 			return res.status(400).send("Parameters not found");
 	});
 
-router.get('/:id',
+router.get('/:id',middleware.canAccess(['admin', 'user']),
 	async (req, res) => {
-		middleware.canAccess(['admin', 'user'])
 		console.log("[GET] TOKEN : " + req.user);
 		if (req?.params?.id === undefined) return res.status(400).send("Bad request, please provide an ID");
 		const _id = req.params.id;
@@ -69,8 +66,8 @@ router.get('/:id',
 			return res.status(404).send("Location not found");
 	});
 
-router.patch('/:id',async (req, res) => {
-		middleware.canAccess(['admin'])
+router.patch('/:id',middleware.canAccess(['admin']),
+	async (req, res) => {
 		if (req?.params?.id === undefined || !req?.body === undefined) return res.status(400).send("Bad request, please check the id and the body");
 		const _id = req.params.id;
 		const response = await locationsService.updateOne({_id}, req.body);
@@ -80,8 +77,8 @@ router.patch('/:id',async (req, res) => {
 			return res.status(400).send("Location not found");
 	});
 
-router.delete('/:id',async (req, res) => {
-		middleware.canAccess(['admin'])
+router.delete('/:id',middleware.canAccess(['admin']),
+	async (req, res) => {
 		if (req?.params?.id === undefined) return res.status(400).send("Bad request, please provide an ID");
 		const _id = req.params.id;
 		const response = await locationsService.deleteOne({_id});

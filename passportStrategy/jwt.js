@@ -1,5 +1,5 @@
 const passport = require('passport');
-const User = require('../users/users.model');
+const usersService = require('../users/users.service');
 const { Strategy, ExtractJwt } = require('passport-jwt');
 
 passport.use(new Strategy(
@@ -7,12 +7,16 @@ passport.use(new Strategy(
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: process.env.JWT_SECRET
         },
-        function(token, done) {
-            User.findOne({_id: token.sub}, function(err, user) {
-                if (err)    return done(err, false);
+        async function(token, done) {
+            try {
+                const user = await usersService.findOne({_id: token.sub})
+                console.log('user' + user)
                 if (user)   return done(null, user?._id);
                 return done(null, false);
-            });
+            }
+            catch(err) {
+                if (err) return done(err, false);
+            }
         }
     )
 );
