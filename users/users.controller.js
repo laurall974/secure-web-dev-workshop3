@@ -3,29 +3,38 @@ const router = require('express').Router()
 const passport = require('passport');
 require('../passportStrategy/local');
 require('../passportStrategy/jwt.strategy');
+const roleMiddleware = require('../jwtMiddleware/middleware');
 
 
-// Register route
+/** Register route**/
+
 router.post('/register', async (req, res) => {
     console.log(req.body);
-    if (req.body?.username && req.body?.password) {
+    if (req.body?.username && req.body?.password)
+    {
         const {username, password} = req.body;
         const user = await usersService.register(username, password);
-        if (user) return res.status(200).send(user);
-        else return res.status(400).send("An error occurred, bad request");
-    } else return res.status(400).send("Please send the right format : {\"username\":$USERNAME,\"password\":\"$PASSWORD\"}");
+        if (user) {
+            return res.status(200).send(user);
+        }
+        else {
+            return res.status(400).send("An error occurred, bad request");
+        }
+    }
+    else {
+        return res.status(400).send("Please send the right format : {\"username\": \"$USERNAME\",\"password\":\"$PASSWORD\"}");
+    }
 });
 
 
-// Login route
+/** Login route**/
 
 router.post('/login',
-    passport.authenticate('local', {
-        session: false,
-    }),
-    async (req, res) => {
-        const userId = req.user?._id;
-        const token = await usersService.generateJWT(userId);
+    passport.authenticate('local',
+        {session: false,}),
+        async (req, res) => {
+        const id = req.user?._id;
+        const token = await usersService.generateJWT(id);
         return res.status(200).send({token});
     });
 

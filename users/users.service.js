@@ -7,7 +7,7 @@ const saltRounds = 10;
 
 async function register(username, password) {
     try {
-        if (username === undefined) throw new Error("undefined location");
+        if (username === undefined || password === undefined) throw new Error("undefined username or password");
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const user = await User.create({
             username,
