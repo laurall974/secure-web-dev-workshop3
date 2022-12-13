@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const locationsService = require('./locations.service')
-
+const middleware = require('../jwtMiddleware/middleware')
 const passport = require('passport');
 require('../passportStrategy/jwt');
 
@@ -10,9 +10,11 @@ router.use('/', passport.authenticate('jwt', { session: false }));
 
 router.route('/')
 	.get(async (req, res) => {
+		middleware.canAccess(['admin','user'])
 		return res.status(200).send({locations: await locationsService.findAll()});
 	})
 	.post(async (req, res) => {
+		middleware.canAccess(['admin'])
 		if (req?.body) {
 
 			const body = req.body;
@@ -57,6 +59,7 @@ router.route('/')
 
 router.route('/:id')
 	.get(async (req, res) => {
+		middleware.canAccess(['admin', 'user'])
 		console.log("[GET] TOKEN : " + req.user);
 		if (req?.params?.id === undefined) return res.status(400).send("Bad request, please provide an ID");
 		const _id = req.params.id;
@@ -67,6 +70,7 @@ router.route('/:id')
 			return res.status(404).send("Location not found");
 	})
 	.patch(async (req, res) => {
+		middleware.canAccess(['admin'])
 		if (req?.params?.id === undefined || !req?.body === undefined) return res.status(400).send("Bad request, please check the id and the body");
 		const _id = req.params.id;
 		const response = await locationsService.updateOne({_id}, req.body);
@@ -76,6 +80,7 @@ router.route('/:id')
 			return res.status(400).send("Location not found");
 	})
 	.delete(async (req, res) => {
+		middleware.canAccess(['admin'])
 		if (req?.params?.id === undefined) return res.status(400).send("Bad request, please provide an ID");
 		const _id = req.params.id;
 		const response = await locationsService.deleteOne({_id});

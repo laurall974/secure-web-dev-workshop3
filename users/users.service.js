@@ -11,7 +11,9 @@ async function register(username, password) {
         const hashedPsw = await bcrypt.hash(password, saltRounds);
         const user = await User.create({
             username:username,
-            password:hashedPsw
+            password:hashedPsw,
+            role:'user'
+            //par défaut le role est user
         });
         console.log(`User successfully added : ${username}:${password}`);
         return user;

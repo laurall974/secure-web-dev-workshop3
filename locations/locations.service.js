@@ -31,7 +31,7 @@ async function createOne(location) {
 			address,
 			startDate,
 			year
-		}).orFail();
+		});
 		console.log("Location added");
 		return true;
 
