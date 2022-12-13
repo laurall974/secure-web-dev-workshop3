@@ -11,7 +11,7 @@ passport.use(new Strategy(
             try {
                 const user = await usersService.findOne({_id: token.sub})
                 console.log('user' + user)
-                if (user)   return done(null, user?._id);
+                if (user)   return done(null, user);
                 return done(null, false);
             }
             catch(err) {

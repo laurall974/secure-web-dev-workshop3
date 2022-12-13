@@ -52,19 +52,19 @@ router.use('/me',passport.authenticate('jwt', {session:false, failureRedirect:'/
 
 // Get self
 router.get('/me', async (req, res) => {
-    const user = await usersService.getUser(req.user)
+    const user = await usersService.getUser(req.user._id)
     return res.status(200).send(user);
 })
 
 router.patch('/me',
     async (req, res) => {
-        const updatedUser = await usersService.update(req.user, req.body);
+        const updatedUser = await usersService.update(req.user._id, req.body);
         return res.status(200).send(updatedUser);
     })
 
 router.delete('/me',
     async (req, res) => {
-        return res.status(200).send(await(usersService.deleteUser(req.user)));
+        return res.status(200).send(await(usersService.deleteUser(req.user._id)));
     });
 
 // Get all users : remember to not return users passwords on this route
