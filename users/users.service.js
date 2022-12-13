@@ -28,7 +28,7 @@ async function generateJWT(username) {
 
 async function findAll() {
     try {
-        return User.find({}).select('username');
+         return User.find().select('username');
     } catch (err) {
         console.log("ERROR !");
         console.error(err);

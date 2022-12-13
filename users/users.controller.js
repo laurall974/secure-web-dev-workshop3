@@ -67,7 +67,7 @@ router.delete('/me',
 
 // Get all users : remember to not return users passwords on this route
 router.get('/', async (req, res) => {
-    return res.status(200).send({users:usersService.findAll()});
+    return res.status(200).send(await(usersService.findAll()));
 });
 
 
