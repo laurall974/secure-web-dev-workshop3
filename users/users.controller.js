@@ -3,12 +3,13 @@ const router = require('express').Router()
 const passport = require('passport');
 require('../passportStrategy/local');
 require('../passportStrategy/jwt');
-const roleMiddleware = require('../jwtMiddleware/middleware');
+const middleware = require("../jwtMiddleware/middleware");
 
 
 /** Register route**/
 
-router.post('/register', async (req, res) => {
+router.post('/register',
+    async (req, res) => {
     console.log(req.body);
     try {
         if (req.body?.username && req.body?.password)
@@ -51,24 +52,25 @@ router.post('/login',
 router.use('/me',passport.authenticate('jwt', {session:false, failureRedirect:'/login'}));
 
 // Get self
-router.get('/me', async (req, res) => {
+router.get('/me', middleware.canAccess(['admin','user']),async (req, res) => {
     const user = await usersService.getUser(req.user._id)
     return res.status(200).send(user);
 })
 
-router.patch('/me',
+router.patch('/me', middleware.canAccess(['admin','user']),
     async (req, res) => {
         const updatedUser = await usersService.update(req,res);
         return res.status(200).send(updatedUser);
     })
 
-router.delete('/me',
+router.delete('/me', middleware.canAccess(['admin']),
     async (req, res) => {
         return res.status(200).send(await(usersService.deleteUser(req.user._id)));
     });
 
 // Get all users : remember to not return users passwords on this route
-router.get('/', async (req, res) => {
+router.get('/', middleware.canAccess(['admin','user']),
+    async (req, res) => {
     const allUser = await(usersService.findAll())
     return res.status(200).send(allUser);
 });
