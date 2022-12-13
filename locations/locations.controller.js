@@ -2,7 +2,7 @@ const router = require('express').Router()
 const locationsService = require('./locations.service')
 
 const passport = require('passport');
-require('../passportStrategy/jwt.strategy');
+require('../passportStrategy/jwt');
 
 
 // Authorization middleware

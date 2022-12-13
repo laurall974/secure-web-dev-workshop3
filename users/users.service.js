@@ -22,6 +22,10 @@ async function register(username, password) {
     }
 }
 
+async function generateJWT(username) {
+    return jwt.sign({sub:username}, process.env.JWT_SECRET);
+}
+
 async function findAll() {
     try {
         return User.find({}).select('username');
@@ -29,6 +33,15 @@ async function findAll() {
         console.log("ERROR !");
         console.error(err);
         return false;
+    }
+}
+async function checkUser(username) {
+    try {
+        return await User.findOne({'username' : username});
+    } catch (err) {
+        console.log("ERROR !");
+        console.error(err);
+        return null;
     }
 }
 
@@ -42,19 +55,9 @@ async function getUser(id) {
     }
 }
 
-async function checkUser(username) {
-    try {
-        return await User.findOne({'username' : username});
-    } catch (err) {
-        console.log("ERROR !");
-        console.error(err);
-        return null;
-    }
-}
-
 async function update(id, property) {
     try {
-        await User.findOneAndUpdate({id}, property);
+        await User.findOneAndUpdate({_id}, property);
         return await getUser(id);
     } catch (err) {
         console.log("ERROR !");
@@ -86,9 +89,6 @@ async function verify(username, password) {
 }
 
 
-async function generateJWT(username) {
-    return jwt.sign({sub:username}, process.env.JWT_SECRET);
-}
 
 
 module.exports.register = register;

@@ -10,20 +10,21 @@ const roleMiddleware = require('../jwtMiddleware/middleware');
 
 router.post('/register', async (req, res) => {
     console.log(req.body);
-    if (req.body?.username && req.body?.password)
-    {
-        const {username, password} = req.body;
-        const user = await usersService.register(username, password);
-        if (user) {
-            return res.status(200).send(user);
-        }
-        else {
-            return res.status(400).send("An error occurred, bad request");
+    try {
+        if (req.body?.username && req.body?.password)
+        {
+            const {username, password} = req.body;
+            const user = await usersService.register(username, password);
+            if (user) {
+                return res.status(200).send(user);
+            }
+            else {
+                return res.status(400).send("An error occurred, bad request. Try another username or password");
+            }
         }
     }
-    else {
-        return res.status(400).send("Please send the right format : {\"username\": \"$USERNAME\",\"password\":\"$PASSWORD\"}");
-    }
+    catch(error) {
+    next(error); }
 });
 
 

@@ -4,14 +4,14 @@ const { Strategy, ExtractJwt } = require('passport-jwt');
 
 passport.use(new Strategy(
         {
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),   // extract token from Authorization header as a Bearer token
-            secretOrKey: process.env.JWT_SECRET                         // jwt secret extracted from .env
+            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+            secretOrKey: process.env.JWT_SECRET
         },
         function(token, done) {
-            User.findOne({id: token.sub}, function(err, user) {
-                if (err)    return done(err, false);        // error
-                if (user)   return done(null, user?._id);   // user found
-                return done(null, false);                   // user not found
+            User.findOne({_id: token.sub}, function(err, user) {
+                if (err)    return done(err, false);
+                if (user)   return done(null, user?._id);
+                return done(null, false);
             });
         }
     )
