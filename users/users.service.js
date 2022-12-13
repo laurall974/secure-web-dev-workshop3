@@ -8,15 +8,15 @@ const saltRounds = 10;
 async function register(username, password) {
     try {
         if (username === undefined || password === undefined) throw new Error("undefined username or password");
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPsw = await bcrypt.hash(password, saltRounds);
         const user = await User.create({
-            username,
-            password:hashedPassword
+            username:username,
+            password:hashedPsw
         });
-        console.log(`[+] Added user : ${username}:${password}`);
+        console.log(`User successfully added : ${username}:${password}`);
         return user;
     } catch (err) {
-        console.log("[!] No user created");
+        console.log("ERROR ! No user created !");
         console.error(err);
         return null;
     }
