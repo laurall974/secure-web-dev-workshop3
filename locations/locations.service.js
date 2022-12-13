@@ -7,10 +7,7 @@ async function findAll () {
 }
 async function findOne({_id}) {
 	try {
-		if (_id.match(/^[0-9a-fA-F]{24}$/))
-			return Location.findOne({_id}, null).orFail();
-		else
-			throw new Error("id specified is incorrect");
+		return Location.findOne({_id}, null);
 	} catch (err) {
 		console.log("Something occured while retrieving a location");
 		console.error(err);
@@ -71,10 +68,8 @@ async function updateOne(id, property){
 	}
 }
 
-module.exports = {
-	findAll,
-	findOne,
-	createOne,
-	deleteOne,
-	updateOne
-}
+module.exports.findAll = findAll
+module.exports.findOne = findOne
+module.exports.createOne = createOne
+module.exports.deleteOne = deleteOne
+module.exports.updateOne = updateOne

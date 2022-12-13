@@ -52,7 +52,8 @@ router.use('/me',passport.authenticate('jwt', {session:false, failureRedirect:'/
 
 // Get self
 router.get('/me', async (req, res) => {
-    return res.status(200).send(await usersService.getUser(req.user));
+    const user = await usersService.getUser(req.user)
+    return res.status(200).send(user);
 })
 
 router.patch('/me',
