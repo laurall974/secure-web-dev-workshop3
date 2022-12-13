@@ -58,7 +58,7 @@ router.get('/me', async (req, res) => {
 
 router.patch('/me',
     async (req, res) => {
-        const updatedUser = await usersService.update(req.user._id, req.body);
+        const updatedUser = await usersService.update(req,res);
         return res.status(200).send(updatedUser);
     })
 

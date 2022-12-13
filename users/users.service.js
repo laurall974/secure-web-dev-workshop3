@@ -57,27 +57,18 @@ async function getUser(id) {
     }
 }
 
-async function update(id, property) {
-    try {
-        //on l'empeche de modofier son role
-        if (property.role != null)
-        {
-            const obj = {
-                "username":property.username,
-                "password":property.password
-            }
-            await User.findOneAndUpdate(id, obj);
-            return await getUser(id);
-        }
-        else {
-            await User.findOneAndUpdate(id, property);
-            return await getUser(id);
-        }
-    } catch (err) {
-        console.log("ERROR !");
-        console.error(err);
-        return null;
+async function update(req,res){
+    let obj = {
+        username: req.body.username,
+        password: await bcrypt.hash(req.body.password, 10),
+        role: req.user.role
     }
+    console.log(obj)
+    console.log(req.user.id)
+    console.log(req.user.username)
+    const user = await User.findOneAndUpdate(req.user._id, obj, {new:true});
+    res.send(user)
+
 }
 
 async function deleteUser(id) {
