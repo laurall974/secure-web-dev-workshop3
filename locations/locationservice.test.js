@@ -25,7 +25,7 @@ describe('Location findOne', () =>{
         Location.findOne.mockResolvedValue(mockLocation)
         expect(await locationsService.findOne({_id:'kef8667jsbfjhrgjh625'})).toEqual(mockLocation)
         expect(Location.findOne).toHaveBeenCalledTimes(1)
-    })
+    });
 
     it('Should get a Location', async () => {
         jest.resetAllMocks()
@@ -34,8 +34,8 @@ describe('Location findOne', () =>{
         Location.findById.mockResolvedValue(mockLocation)
         expect(await locationsService.findOne('kef8667jsbfjhrgjh625')).rejects.toThrow()
         expect(Location.findById).toHaveBeenCalledTimes(1)
-    })
-});
+    });
+})
 
 //j'appelle un service qui utilise un model
 //je mock le model
@@ -48,19 +48,16 @@ describe('Location createOne', () =>{
             endDate:"2018-11-05T00:00:00.000+00:00",
             filmName: "TEST", district: "75004",
             sourceLocationId: "2018-131211",
-            filmDirectorName: "Laura LILI",
+            filmDirectorname: "Laura LILI",
             address:"pont louis-philippe, 75004 paris",
             startDate:"2018-11-05T00:00:00.000+00:00",
             year:"2018"}
-        const saved = jest.fn().mockResolvedValue();
-        Location.mockImplementation(() => ({
-            saved
-        }));
-
+        const save = jest.fn().mockResolvedValue();
+        Location.mockImplementation(() => ({save}));
         await locationsService.createOne(data);
 
-        expect(Location.create).toHaveBeenCalledWith(data);
-        expect(saved).toHaveBeenCalled();
+        expect(Location).toHaveBeenCalledWith(data);
+        expect(save).toHaveBeenCalled();
     });
 
     it('should throws an error if the data is invalid', async () => {
