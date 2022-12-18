@@ -100,7 +100,7 @@ describe('Locations deleteOne', ()=>{
 //Test of updateLocation function, with a valid and an unknown location
 describe('Locations updateOne', ()=>{
     it('should update an existing location', async () => {
-        const id = 'kef8667jsbfjhrgjh625';
+        const id = "kef8667jsbfjhrgjh625";
         const update = {filmType: "UPDATE",
             filmProducerName: "UPDATE"}
         const location = {};
