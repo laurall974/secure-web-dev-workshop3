@@ -48,7 +48,7 @@ describe('Location createOne', () =>{
             endDate:"2018-11-05T00:00:00.000+00:00",
             filmName: "TEST", district: "75004",
             sourceLocationId: "2018-131211",
-            filmDirectorname: "Laura LILI",
+            filmDirectorName: "Laura LILI",
             address:"pont louis-philippe, 75004 paris",
             startDate:"2018-11-05T00:00:00.000+00:00",
             year:"2018"}
@@ -77,7 +77,7 @@ describe('Location createOne', () =>{
 
 describe('Locations deleteOne', ()=>{
     it('should delete an existing location', async () => {
-        const id = 'kef8667jsbfjhrgjh625';
+        const id = "kef8667jsbfjhrgjh625";
         Location.findOneAndDelete.mockResolvedValue("Valid");
         await locationsService.deleteOne(id);
         expect(Location.findOneAndDelete).toHaveBeenCalledWith({ _id: 'kef8667jsbfjhrgjh625' });
@@ -98,16 +98,17 @@ describe('Locations deleteOne', ()=>{
 
 
 //Test of updateLocation function, with a valid and an unknown location
-describe('Locations updateLocation', ()=>{
+describe('Locations updateOne', ()=>{
     it('should update an existing location', async () => {
-        const id = '123456';
-        const update = { name: 'Great One', country: 'USA' };
+        const id = 'kef8667jsbfjhrgjh625';
+        const update = {filmType: "UPDATE",
+            filmProducerName: "UPDATE"}
         const location = {};
         const updateOne = jest.fn().mockResolvedValue("Valid");
         Location.updateOne = updateOne;
 
-        await locationsService.updateLocation(id, update);
-        expect(updateOne).toHaveBeenCalledWith({ _id: id }, update);
+        await locationsService.updateOne(id, update);
+        expect(updateOne).toHaveBeenCalledWith({ _id: 'kef8667jsbfjhrgjh625' }, update);
     });
 
     it('should throws an error if the location does not exist', async () => {
@@ -117,7 +118,7 @@ describe('Locations updateLocation', ()=>{
         const updateOne = jest.fn().mockResolvedValue(null);
         Location.updateOne = updateOne;
         try {
-            await locationsService.updateLocation(id, update);
+            await locationsService.updateOne(id, update);
         } catch (error) {
             expect(error.message).toBe('Location not found');
         }

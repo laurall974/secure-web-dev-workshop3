@@ -19,14 +19,14 @@ async function createOne(location) {
 	try {
 		if (location === undefined) throw new Error("undefined location");
 
-		const { filmType, filmProducerName, endDate, filmName, district, sourceLocationId, filmDirectorname, address, startDate, year } = location;
+		const { filmType, filmProducerName, endDate, filmName, district, sourceLocationId, filmDirectorName, address, startDate, year } = location;
 		await Location.create({ filmType,
 			filmProducerName,
 			endDate,
 			filmName,
 			district,
 			sourceLocationId,
-			filmDirectorname,
+			filmDirectorName,
 			address,
 			startDate,
 			year
@@ -44,7 +44,7 @@ async function createOne(location) {
 async function deleteOne(id){
 	try {
 		const {_id} = id;
-		await Location.findOneAndDelete({_id}).orFail();
+		await Location.findOneAndDelete({_id: id}).orFail();
 		console.log(`Deleted ${_id}`);
 		return true;
 	}
@@ -58,10 +58,10 @@ async function deleteOne(id){
 async function updateOne(id, property){
 	try {
 		const {_id} = id;
-		await Location.findOneAndUpdate({_id}, property).orFail();
+		await Location.findOneAndUpdate({_id: id}, property).orFail();
 		console.log(`Updated ${_id}`);
 		return true;
-	} catch (e) {
+	} catch (err) {
 		console.log("No update");
 		console.error(err);
 		return false;
