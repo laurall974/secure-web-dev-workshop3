@@ -47,7 +47,8 @@ async function deleteOne(id){
 		await Location.findOneAndDelete({_id}).orFail();
 		console.log(`Deleted ${_id}`);
 		return true;
-	} catch (e) {
+	}
+	catch (err) {
 		console.log("No delete");
 		console.error(err);
 		return false;

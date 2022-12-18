@@ -77,10 +77,10 @@ describe('Location createOne', () =>{
 
 describe('Locations deleteOne', ()=>{
     it('should delete an existing location', async () => {
-        const id = '1234';
+        const id = 'kef8667jsbfjhrgjh625';
         Location.findOneAndDelete.mockResolvedValue("Valid");
         await locationsService.deleteOne(id);
-        expect(Location.findOneAndDelete).toHaveBeenCalledWith({ _id: id });
+        expect(Location.findOneAndDelete).toHaveBeenCalledWith({ _id: 'kef8667jsbfjhrgjh625' });
     });
 
     it('should throws an error if the location does not exist', async () => {
