@@ -53,11 +53,11 @@ describe('Location createOne', () =>{
             startDate:"2018-11-05T00:00:00.000+00:00",
             year:"2018"}
         const save = jest.fn().mockResolvedValue();
-        Location.mockImplementation(() => ({save}));
+        Location.create.mockImplementation(() => ({save}));
         await locationsService.createOne(data);
 
-        expect(Location).toHaveBeenCalledWith(data);
-        expect(save).toHaveBeenCalled();
+        expect(Location.create).toHaveBeenCalledWith(data);
+        expect(save).toHaveBeenCalledTimes(1);
     });
 
     it('should throws an error if the data is invalid', async () => {
@@ -103,12 +103,12 @@ describe('Locations updateOne', ()=>{
         const id = "kef8667jsbfjhrgjh625";
         const update = {filmType: "UPDATE",
             filmProducerName: "UPDATE"}
-        const location = {};
-        const updateOne = jest.fn().mockResolvedValue("Valid");
-        Location.updateOne = updateOne;
 
+        const updateOne = jest.fn().mockResolvedValue("Valid");
+        Location.updateOne.mockImplementation(() => ({updateOne}));
         await locationsService.updateOne(id, update);
-        expect(updateOne).toHaveBeenCalledWith({ _id: 'kef8667jsbfjhrgjh625' }, update);
+
+        expect(Location.updateOne).toHaveBeenCalledWith(id, update);
     });
 
     it('should throws an error if the location does not exist', async () => {
