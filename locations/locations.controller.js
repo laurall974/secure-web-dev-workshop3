@@ -22,9 +22,6 @@ router.post('/',middleware.canAccess(['admin']),async (req, res) => {
 			body.endDate &&
 			body.filmName &&
 			body.district &&
-			body?.geolocation &&
-			body.geolocation?.coordinates &&
-			body.geolocation?.type &&
 			body.sourceLocationId &&
 			body.filmDirectorName &&
 			body.address &&
@@ -37,13 +34,9 @@ router.post('/',middleware.canAccess(['admin']),async (req, res) => {
 		} else {
 			return res.status(400).send("Parameters are incorrect, please use : \n" + "{\t\nfilmType: String,\n" +
 				"\tfilmProducerName: String, \n" +
-				"\tendDate: Date, \n" +
+				"\tendDate: YYYY-MM-DDT00:00:00.000+00:00, \n" +
 				"\tfilmName: String, \n" +
 				"\tdistrict: Number, \n" +
-				"\tgeolocation: {\n" +
-				"\t\tcoordinates: [Number], \n" +
-				"\t\ttype: { type: String }, \n" +
-				"\t}, \n" +
 				"\tsourceLocationId: String, \n" +
 				"\tfilmDirectorName: String, \n" +
 				"\taddress: String, \n" +
