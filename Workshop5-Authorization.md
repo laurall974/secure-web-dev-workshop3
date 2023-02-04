@@ -64,7 +64,7 @@ sends a signal to `Express` to try and start the next function/middleware in the
 
 When you need to pass some extra arguments to a middleware, like a list of `allowedRoles`, HOF comes handy:
 ```javascript
-router.get('/users/me', authMiddleware, roleMiddleware(['admin']), (res,req) => {
+router.get('/locations', passport.authenticate(.......), roleMiddleware(['admin']), (req,res) => {
 	res.status(200).send(req.user)
 })
 ```
